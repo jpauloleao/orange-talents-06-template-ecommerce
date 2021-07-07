@@ -42,5 +42,15 @@ public class ValidationErrorHandler {
 		        return va;
 	    }
 	    
+	    @ResponseStatus(HttpStatus.BAD_REQUEST)
+	    @ExceptionHandler(IllegalArgumentException.class)
+	    public ValidationErrorsOutputDto argumentoNulos(IllegalArgumentException exception) {
+
+	    	   ValidationErrorsOutputDto va = new ValidationErrorsOutputDto(messageSource);
+		        va.addError(exception.getMessage());
+		        
+		        return va;
+	    }
+	    
 	    	
 }

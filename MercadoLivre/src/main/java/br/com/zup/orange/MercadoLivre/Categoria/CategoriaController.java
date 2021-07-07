@@ -1,4 +1,4 @@
-package br.com.zup.orange.MercadoLivre.Usuario;
+package br.com.zup.orange.MercadoLivre.Categoria;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,20 +11,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+@RequestMapping("/categoria")
 @RestController
-@RequestMapping("/usuario")
-public class UsuarioController {
+public class CategoriaController {
 
 	@PersistenceContext
-	private EntityManager manager;
+	private EntityManager em;
 	
-	@PostMapping
 	@Transactional
-	public ResponseEntity<?> cadastraUsuario(@RequestBody @Valid UsuarioRequest usuarioRequest){
-		Usuario usuario = usuarioRequest.toModel();
-		manager.persist(usuario);
+	@PostMapping
+	public ResponseEntity<?> cadastrarCategoria(@RequestBody @Valid CategoriaRequest categoriaRequest){
+		Categoria categoria = categoriaRequest.toModel(em);
+		em.persist(categoria);
 		
-		return ResponseEntity.ok("Cadastrado");
+		return ResponseEntity.ok("Categoria Cadastrada");
 	}
 }

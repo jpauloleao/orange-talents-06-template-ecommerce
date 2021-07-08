@@ -41,5 +41,20 @@ public class Usuario {
 		this.login = login;
 		this.senha = new BCryptPasswordEncoder().encode(senha);
 	}
+
+	@Deprecated
+	public Usuario() {
+		
+	}
+	
+	public String getLogin() {
+		return login;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+	
+	
 	
 }

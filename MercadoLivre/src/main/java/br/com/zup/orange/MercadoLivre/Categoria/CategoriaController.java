@@ -24,6 +24,6 @@ public class CategoriaController {
 		Categoria categoria = categoriaRequest.toModel(em);
 		em.persist(categoria);
 		
-		return ResponseEntity.ok("Categoria Cadastrada");
+		return ResponseEntity.ok(categoria);
 	}
 }

@@ -35,11 +35,12 @@ public class Usuario {
 	
 	@PastOrPresent
 	@NotNull
-	private LocalDateTime registroCriacao = LocalDateTime.now();
+	private LocalDateTime registroCriacao;
 
 	public Usuario(@NotBlank @Email String login, @NotBlank @NotNull @Size(min = 6) String senha) {
 		this.login = login;
 		this.senha = new BCryptPasswordEncoder().encode(senha);
+		this.registroCriacao =  LocalDateTime.now();
 	}
 
 	@Deprecated

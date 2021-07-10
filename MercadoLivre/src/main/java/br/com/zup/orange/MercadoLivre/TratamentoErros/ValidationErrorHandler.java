@@ -2,6 +2,7 @@ package br.com.zup.orange.MercadoLivre.TratamentoErros;
 
 import java.util.List;
 
+
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,13 +44,15 @@ public class ValidationErrorHandler {
 	    }
 	    
 	    @ResponseStatus(HttpStatus.BAD_REQUEST)
-	    @ExceptionHandler(IllegalArgumentException.class)
-	    public ValidationErrorsOutputDto argumentoNulos(IllegalArgumentException exception) {
-
+	    @ExceptionHandler(IllegalStateException.class)
+	    public ValidationErrorsOutputDto teste(IllegalStateException exception) {
+	    	
 	    	   ValidationErrorsOutputDto va = new ValidationErrorsOutputDto(messageSource);
-		        va.addError(exception.getMessage());
+	    	   List<ObjectError> globalErrors = List.of(new ObjectError("", exception.getMessage()));
+	    	   List<FieldError> fieldErrors = List.of();
+	    	   
 		        
-		        return va;
+		       return va.buildValidationErrors(globalErrors, fieldErrors);
 	    }
 	    
 	    	    

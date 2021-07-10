@@ -75,7 +75,6 @@ public class ProdutoRequest {
 		for(CaracteristicaRequest caracteristica : caracteristicas) {
 			
 			
-			
 			if (!nomesIguais.add(caracteristica.getNome())) {
 				resultados.add(caracteristica.getNome());
 			}

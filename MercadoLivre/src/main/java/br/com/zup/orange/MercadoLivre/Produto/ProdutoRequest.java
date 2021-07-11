@@ -16,6 +16,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Length;
 
 import br.com.zup.orange.MercadoLivre.Categoria.Categoria;
+import br.com.zup.orange.MercadoLivre.Produto.Caracteristicas.CaracteristicaRequest;
 import br.com.zup.orange.MercadoLivre.Seguranca.UsuarioLogado;
 import br.com.zup.orange.MercadoLivre.Valicacoes.ObjectExists;
 import br.com.zup.orange.MercadoLivre.Valicacoes.UniqueValue;
@@ -39,7 +40,6 @@ public class ProdutoRequest {
 	
 	@Size(min = 3) @Valid
 	private List<CaracteristicaRequest> caracteristicas = new ArrayList<>();
-	
 	
 
 	public ProdutoRequest(@NotBlank String nome, @Positive int quantidade,

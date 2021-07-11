@@ -2,8 +2,10 @@ package br.com.zup.orange.MercadoLivre.Produto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,6 +26,10 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Length;
 
 import br.com.zup.orange.MercadoLivre.Categoria.Categoria;
+import br.com.zup.orange.MercadoLivre.Produto.Caracteristicas.CaracteristicaProduto;
+import br.com.zup.orange.MercadoLivre.Produto.Caracteristicas.CaracteristicaRequest;
+import br.com.zup.orange.MercadoLivre.Produto.Imagem.ImagemProduto;
+import br.com.zup.orange.MercadoLivre.Seguranca.UsuarioLogado;
 import br.com.zup.orange.MercadoLivre.Usuario.Usuario;
 
 @Entity
@@ -61,6 +67,9 @@ public class Produto {
 	
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.PERSIST)
 	private Set<CaracteristicaProduto> caracteristicas = new HashSet<>();
+	
+	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+	private List<ImagemProduto> imagens = new ArrayList<>();
 
 	public Produto(@NotBlank String nome, @NotNull @Positive BigDecimal valor, @Positive @NotNull int quantidade,
 			@NotBlank @Length(max = 1000) String descricao,
@@ -79,5 +88,30 @@ public class Produto {
 		
 		this.caracteristicas.addAll(todasCaracteristicas);
 	}
+	
+	@Deprecated
+	public Produto() {
+		super();
+	}
 
+	public void associaImagens(List<String> links) {
+		List<ImagemProduto> imagens = links.stream()
+				.map(link -> new ImagemProduto(link, this))
+				.collect(Collectors.toList());
+		this.imagens.addAll(imagens);
+	}
+
+	public boolean verificaDono(UsuarioLogado usuarioLogado) {
+		return this.dono.getLogin().equals(usuarioLogado.getUsername());
+	}
+	
+	@Override
+	public String toString() {
+		return "Produto [id=" + id + ", nome=" + nome + ", quantidade="
+				+ quantidade + ", descricao=" + descricao + ", valor=" + valor
+				+ ", categoria=" + categoria + ", dono=" + dono
+				+ ", caracteristicas=" + caracteristicas + ", imagens="
+				+ imagens.toString() + "]";
+	}
+	
 }

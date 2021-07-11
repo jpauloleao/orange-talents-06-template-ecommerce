@@ -1,8 +1,10 @@
-package br.com.zup.orange.MercadoLivre.Produto;
+package br.com.zup.orange.MercadoLivre.Produto.Caracteristicas;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import br.com.zup.orange.MercadoLivre.Produto.Produto;
 
 public class CaracteristicaRequest {
 	

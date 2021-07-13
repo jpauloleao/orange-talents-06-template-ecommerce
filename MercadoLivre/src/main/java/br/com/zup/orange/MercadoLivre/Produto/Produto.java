@@ -113,5 +113,15 @@ public class Produto {
 				+ ", caracteristicas=" + caracteristicas + ", imagens="
 				+ imagens.toString() + "]";
 	}
+
+	public Usuario getDono() {
+		return dono;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+	
+	
 	
 }

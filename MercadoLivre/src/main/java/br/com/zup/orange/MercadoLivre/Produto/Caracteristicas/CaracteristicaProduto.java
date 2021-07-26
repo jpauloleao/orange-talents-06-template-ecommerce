@@ -9,6 +9,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.zup.orange.MercadoLivre.Produto.Produto;
 
 @Entity
@@ -24,6 +26,7 @@ public class CaracteristicaProduto {
 	    private String descricao;
 	    
 	    @NotNull @ManyToOne @Valid
+	    @JsonIgnore
 	    private Produto produto;
 
 	    @Deprecated
@@ -67,6 +70,23 @@ public class CaracteristicaProduto {
 				return false;
 			return true;
 		}
+
+		public Long getId() {
+			return id;
+		}
+
+		public String getNome() {
+			return nome;
+		}
+
+		public String getDescricao() {
+			return descricao;
+		}
+
+		public Produto getProduto() {
+			return produto;
+		}
+		
 		
 
 }

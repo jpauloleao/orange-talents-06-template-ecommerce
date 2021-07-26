@@ -12,6 +12,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.zup.orange.MercadoLivre.Produto.Produto;
 import br.com.zup.orange.MercadoLivre.Usuario.Usuario;
 
@@ -32,11 +34,13 @@ public class Pergunta {
 	@Valid
 	@NotNull 
 	@ManyToOne	
+	@JsonIgnore
 	private Usuario usuario;
 	
 	@Valid
 	@NotNull 
 	@ManyToOne
+	@JsonIgnore
 	private Produto produto;
 
 	public Pergunta(@NotBlank String titulo, @Valid @NotNull Usuario usuario, @Valid @NotNull Produto produto) {
@@ -45,6 +49,11 @@ public class Pergunta {
 		this.usuario = usuario;
 		this.produto = produto;
 		this.instanteCadastro = LocalDateTime.now();
+	}
+	
+	@Deprecated
+	public Pergunta() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public String getTitulo() {

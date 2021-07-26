@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,6 +51,17 @@ public class ProdutoController {
 		em.persist(produto);
 		
 		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping(value = "/{id}/detalhes")
+	@Transactional
+	public ResponseEntity<?> detalhesProduto(@AuthenticationPrincipal UsuarioLogado usuarioLogado, @PathVariable("id") Long id) {
+		Produto produto = em.find(Produto.class, id);
+		
+		ProdutoResponse prd = new ProdutoResponse(produto, em);
+		
+		return ResponseEntity.ok(prd);
+
 	}
 	
 	@PostMapping(value = "/{id}/imagens")

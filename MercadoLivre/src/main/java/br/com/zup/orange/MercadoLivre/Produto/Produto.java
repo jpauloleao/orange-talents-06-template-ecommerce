@@ -25,6 +25,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.zup.orange.MercadoLivre.Categoria.Categoria;
 import br.com.zup.orange.MercadoLivre.Produto.Caracteristicas.CaracteristicaProduto;
 import br.com.zup.orange.MercadoLivre.Produto.Caracteristicas.CaracteristicaRequest;
@@ -66,6 +68,7 @@ public class Produto {
 	private LocalDateTime instanteCadastro;
 	
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.PERSIST)
+	@JsonIgnore
 	private Set<CaracteristicaProduto> caracteristicas = new HashSet<>();
 	
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
@@ -121,6 +124,31 @@ public class Produto {
 	public String getNome() {
 		return nome;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public int getQuantidade() {
+		return quantidade;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public BigDecimal getValor() {
+		return valor;
+	}
+
+	public Set<CaracteristicaProduto> getCaracteristicas() {
+		return caracteristicas;
+	}
+
+	public List<ImagemProduto> getImagens() {
+		return imagens;
+	}
+	
 	
 	
 	

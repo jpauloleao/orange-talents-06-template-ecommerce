@@ -13,6 +13,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.zup.orange.MercadoLivre.Produto.Produto;
 import br.com.zup.orange.MercadoLivre.Usuario.Usuario;
 
@@ -42,7 +44,13 @@ public class Opiniao {
 	@ManyToOne
 	@NotNull
 	@Valid
+	@JsonIgnore
 	private Produto produto;
+	
+	@Deprecated
+	public Opiniao() {
+		// TODO Auto-generated constructor stub
+	}
 
 	public Opiniao(@Min(1) @Max(5) int nota, @NotBlank String titulo, @NotBlank @Length(max = 500) String descricao,
 			@NotNull @Valid Usuario usuario, @Valid @NotNull Produto produto) {
@@ -53,5 +61,22 @@ public class Opiniao {
 		this.usuario = usuario;
 		this.produto = produto;
 	}
+
+	public Produto getProduto() {
+		return produto;
+	}
+
+	public int getNota() {
+		return nota;
+	}
+	
+	public String getTitulo() {
+		return titulo;
+	}
+	
+	public String getDescricao() {
+		return descricao;
+	}
+	
 	
 }

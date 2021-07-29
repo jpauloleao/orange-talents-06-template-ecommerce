@@ -56,6 +56,10 @@ public class Usuario {
 		return senha;
 	}
 	
+	public Long getId() {
+		return id;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub

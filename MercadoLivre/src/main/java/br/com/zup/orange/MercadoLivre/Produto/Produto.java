@@ -24,10 +24,12 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.zup.orange.MercadoLivre.Categoria.Categoria;
+import br.com.zup.orange.MercadoLivre.Compra.CompraRequest;
 import br.com.zup.orange.MercadoLivre.Produto.Caracteristicas.CaracteristicaProduto;
 import br.com.zup.orange.MercadoLivre.Produto.Caracteristicas.CaracteristicaRequest;
 import br.com.zup.orange.MercadoLivre.Produto.Imagem.ImagemProduto;
@@ -40,44 +42,46 @@ public class Produto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotBlank
 	private String nome;
-	
-	@Positive @NotNull
+
+	@Positive
+	@NotNull
 	private int quantidade;
-	
-	@NotBlank @Length(max = 1000)
+
+	@NotBlank
+	@Length(max = 1000)
 	private String descricao;
-	
-	@NotNull @Positive 
+
+	@NotNull
+	@Positive
 	private BigDecimal valor;
-	
+
 	@NotNull
 	@Valid
 	@ManyToOne
 	private Categoria categoria;
-	
+
 	@NotNull
 	@Valid
 	@ManyToOne
 	private Usuario dono;
-	
+
 	@PastOrPresent
 	@NotNull
 	private LocalDateTime instanteCadastro;
-	
+
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.PERSIST)
 	@JsonIgnore
 	private Set<CaracteristicaProduto> caracteristicas = new HashSet<>();
-	
+
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
 	private List<ImagemProduto> imagens = new ArrayList<>();
 
 	public Produto(@NotBlank String nome, @NotNull @Positive BigDecimal valor, @Positive @NotNull int quantidade,
-			@NotBlank @Length(max = 1000) String descricao,
-			@NotNull @Valid Categoria categoria, @NotNull @Valid Usuario dono,
-			@Size(min = 3) @Valid Collection<CaracteristicaRequest> caracteristicas) {
+			@NotBlank @Length(max = 1000) String descricao, @NotNull @Valid Categoria categoria,
+			@NotNull @Valid Usuario dono, @Size(min = 3) @Valid Collection<CaracteristicaRequest> caracteristicas) {
 
 		this.nome = nome;
 		this.quantidade = quantidade;
@@ -86,20 +90,20 @@ public class Produto {
 		this.categoria = categoria;
 		this.dono = dono;
 		this.instanteCadastro = LocalDateTime.now();
-		
-		Set<CaracteristicaProduto> todasCaracteristicas = caracteristicas.stream().map(caracteristica -> caracteristica.toModel(this)).collect(Collectors.toSet());
-		
+
+		Set<CaracteristicaProduto> todasCaracteristicas = caracteristicas.stream()
+				.map(caracteristica -> caracteristica.toModel(this)).collect(Collectors.toSet());
+
 		this.caracteristicas.addAll(todasCaracteristicas);
 	}
-	
+
 	@Deprecated
 	public Produto() {
 		super();
 	}
 
 	public void associaImagens(List<String> links) {
-		List<ImagemProduto> imagens = links.stream()
-				.map(link -> new ImagemProduto(link, this))
+		List<ImagemProduto> imagens = links.stream().map(link -> new ImagemProduto(link, this))
 				.collect(Collectors.toList());
 		this.imagens.addAll(imagens);
 	}
@@ -107,14 +111,12 @@ public class Produto {
 	public boolean verificaDono(UsuarioLogado usuarioLogado) {
 		return this.dono.getLogin().equals(usuarioLogado.getUsername());
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Produto [id=" + id + ", nome=" + nome + ", quantidade="
-				+ quantidade + ", descricao=" + descricao + ", valor=" + valor
-				+ ", categoria=" + categoria + ", dono=" + dono
-				+ ", caracteristicas=" + caracteristicas + ", imagens="
-				+ imagens.toString() + "]";
+		return "Produto [id=" + id + ", nome=" + nome + ", quantidade=" + quantidade + ", descricao=" + descricao
+				+ ", valor=" + valor + ", categoria=" + categoria + ", dono=" + dono + ", caracteristicas="
+				+ caracteristicas + ", imagens=" + imagens.toString() + "]";
 	}
 
 	public Usuario getDono() {
@@ -148,8 +150,13 @@ public class Produto {
 	public List<ImagemProduto> getImagens() {
 		return imagens;
 	}
-	
-	
-	
-	
+
+	public Integer diminuiEstoque(CompraRequest compraRequest) {
+		Assert.state(this.quantidade > 0, "Produto não tem estoque");
+		Assert.state(this.quantidade >= compraRequest.getQuantidade(), "O produto não possui estoque suficiente");
+		Assert.state((this.quantidade - compraRequest.getQuantidade()) == 1 , "O produto não pode ficar com estoque menor que 1");
+
+		return this.quantidade = this.quantidade - compraRequest.getQuantidade();
+	}
+
 }
